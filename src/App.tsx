@@ -2,6 +2,7 @@ import {useState} from "react";
 import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
+import {Button} from "./Button.tsx";
 
 
 type ObjectType = {
@@ -19,7 +20,7 @@ export type TasksType = {
 export type FilterValuesType = "all" | "active" | "completed";
 
 
-export const App = ()=> {
+export const App = () => {
 
     const [todo, setTodo] = useState<Array<ObjectType>>([
         {
@@ -167,7 +168,7 @@ export const App = ()=> {
     }
 
     const removeAllTodolists = () => {
-        //todo: САМОСТОЯТЕЛЬНО
+        setTodo([])
     }
 
     const removeAllTasksInOneTodo = (todolistId: number) => {
@@ -180,19 +181,18 @@ export const App = ()=> {
     return (
         <div className="App">
             <div>
-
+                <Button title={'removeAllTodolists'} onClick={removeAllTodolists}/>
             </div>
-
             {
                 todo.map((tl, index) => {
                     let allTodolistTasks = tl.tasks;
                     let tasksForTodolist = allTodolistTasks;
 
                     if (tl.filter === "active") {
-                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone === false);
+                        tasksForTodolist = allTodolistTasks.filter(t => !t.isDone);
                     }
                     if (tl.filter === "completed") {
-                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone === true);
+                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone);
                     }
 
                     return <Todolist
@@ -207,7 +207,7 @@ export const App = ()=> {
                         changeTaskStatus={changeStatus}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
-
+                        removeAllTasksInOneTodo={removeAllTasksInOneTodo}
                     />
                 })
             }
